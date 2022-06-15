@@ -3,6 +3,8 @@ import { awscdk, javascript } from "projen";
 import { ReactTypeScriptProject, TailwindConfig } from "projen/lib/web";
 
 const project = new awscdk.AwsCdkTypeScriptApp({
+  context: { app: "petorbz" },
+  appEntrypoint: "index.ts",
   name: "petzobz-backend",
   license: "MIT",
   copyrightOwner: "Humanity Corporation",
@@ -14,6 +16,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   jest: false,
   github: false,
   mergify: false,
+  devDeps: ["cdk-nag@2.14.35"],
   prettier: true,
   srcdir: "src",
   testdir: "src",

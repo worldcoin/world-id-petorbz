@@ -21,6 +21,11 @@
       "type": "build"
     },
     {
+      "name": "cdk-nag",
+      "version": "2.14.35",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "build"
     },
