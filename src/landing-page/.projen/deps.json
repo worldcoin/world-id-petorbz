@@ -30,6 +30,14 @@
       "type": "build"
     },
     {
+      "name": "autoprefixer",
+      "type": "build"
+    },
+    {
+      "name": "postcss",
+      "type": "build"
+    },
+    {
       "name": "prettier-plugin-tailwindcss",
       "type": "build"
     },

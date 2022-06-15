@@ -1,6 +1,6 @@
 import path from "path";
-import { awscdk, javascript } from "projen";
-import { ReactTypeScriptProject, TailwindConfig } from "projen/lib/web";
+import { awscdk, javascript, SampleFile } from "projen";
+import { ReactTypeScriptProject } from "projen/lib/web";
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   name: "petzobz-backend",
@@ -35,9 +35,22 @@ const landingPageProject = new ReactTypeScriptProject({
 landingPageProject
   .tryFindObjectFile("package.json")
   ?.addOverride("eslintConfig.root", true);
-new TailwindConfig(landingPageProject);
+
+new SampleFile(landingPageProject, "postcss.config.js", {
+  sourcePath: "./templates/postcss.config.js",
+});
+new SampleFile(landingPageProject, "tailwind.config.js", {
+  sourcePath: "./templates/tailwind.config.js",
+});
+
 landingPageProject.addDeps("classnames");
-landingPageProject.addDevDeps("tailwindcss", "prettier-plugin-tailwindcss");
+
+landingPageProject.addDevDeps(
+  "tailwindcss",
+  "postcss",
+  "autoprefixer",
+  "prettier-plugin-tailwindcss"
+);
 
 landingPageProject.synth();
 const landingPageDir = path.relative(project.outdir, landingPageProject.outdir);
