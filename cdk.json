@@ -1,7 +1,8 @@
 {
   "app": "npx ts-node -P tsconfig.json --prefer-ts-exts src/index.ts",
   "context": {
-    "app": "petorbz"
+    "app": "petorbz",
+    "@aws-cdk/core:bootstrapQualifier": "worldid"
   },
   "output": "cdk.out",
   "build": "npx projen bundle",
