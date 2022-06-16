@@ -4,6 +4,7 @@ import { svgTemplate } from "./svg-template";
 export const svgTransformation = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
+  // TODO Throw an error in case of invalid JSON
   const name = JSON.parse(event?.body || "").name;
 
   if (!name) {
