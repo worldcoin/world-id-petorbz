@@ -10,7 +10,7 @@ export class SvgTransformation extends MultiEnvStack {
       this,
       "svg-transformation",
       {
-        entry: "src/svg-transformation/functions/svg-transformation.ts",
+        entry: "src/svg-transformation/functions/svg-transformation/index.ts",
         handler: "svgTransformation",
         runtime: cdk.aws_lambda.Runtime.NODEJS_16_X,
       }
