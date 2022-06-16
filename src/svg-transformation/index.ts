@@ -12,6 +12,15 @@ export class SvgTransformation extends MultiEnvStack {
       {
         entry: "src/svg-transformation/functions/svg-transformation/index.ts",
         handler: "svgTransformation",
+
+        layers: [
+          cdk.aws_lambda.LayerVersion.fromLayerVersionArn(
+            this,
+            "ChromeBinary",
+            "arn:aws:lambda:us-east-1:764866452798:layer:chrome-aws-lambda:31"
+          ),
+        ],
+
         runtime: cdk.aws_lambda.Runtime.NODEJS_16_X,
       }
     );
