@@ -10,6 +10,9 @@ export class SvgTransformation extends MultiEnvStack {
       this,
       "svg-transformation",
       {
+        bundling: {
+          externalModules: ["@sparticuz/chrome-aws-lambda", "./appIcon.png"],
+        },
         entry: "src/svg-transformation/functions/svg-transformation/index.ts",
         handler: "svgTransformation",
 
@@ -21,7 +24,9 @@ export class SvgTransformation extends MultiEnvStack {
           ),
         ],
 
+        memorySize: 1024,
         runtime: cdk.aws_lambda.Runtime.NODEJS_16_X,
+        timeout: cdk.Duration.seconds(30),
       }
     );
 
