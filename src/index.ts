@@ -2,9 +2,10 @@ import assert from "assert";
 import * as cdk from "aws-cdk-lib";
 import { AwsSolutionsChecks } from "cdk-nag";
 import { Construct } from "constructs";
+import { MultiEnvStack } from "./common/multi-env-stack";
 import { SvgTransformation } from "./svg-transformation";
 
-export class Petorbz extends cdk.Stack {
+export class Petorbz extends MultiEnvStack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props);
     cdk.Tags.of(this).add("app", this.node.tryGetContext("app"));
@@ -23,16 +24,6 @@ export class Petorbz extends cdk.Stack {
 
     // ANCHOR Define stacks
     new SvgTransformation(this, "svg-transformation", {});
-  }
-
-  public get stackName(): string {
-    return (
-      this.node.tryGetContext("env").stage === "dev"
-        ? [this.node.tryGetContext("env:id")]
-        : []
-    )
-      .concat([this.node.tryGetContext("app")])
-      .join("-");
   }
 }
 

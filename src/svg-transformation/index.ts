@@ -1,7 +1,8 @@
 import * as cdk from "aws-cdk-lib";
 import { Construct } from "constructs";
+import { MultiEnvStack } from "../common/multi-env-stack";
 
-export class SvgTransformation extends cdk.Stack {
+export class SvgTransformation extends MultiEnvStack {
   constructor(scope: Construct, id: string, props: cdk.StackProps) {
     super(scope, id, props);
 
@@ -15,8 +16,12 @@ export class SvgTransformation extends cdk.Stack {
       }
     );
 
-    this.exportValue(lambda.functionName, {
-      name: "svg-transformation-function-name",
+    const functionUrl = lambda.addFunctionUrl({
+      authType: cdk.aws_lambda.FunctionUrlAuthType.NONE,
+    });
+
+    new cdk.CfnOutput(this, "svg-transformation-function-url", {
+      value: functionUrl.url,
     });
   }
 }
