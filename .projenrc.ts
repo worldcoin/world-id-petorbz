@@ -16,6 +16,7 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   jest: false,
   github: false,
   mergify: false,
+  deps: ["aws-lambda@1.0.7", "@types/aws-lambda@8.10.100"],
   devDeps: ["cdk-nag@2.14.35"],
   prettier: true,
   srcdir: "src",
