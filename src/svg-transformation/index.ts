@@ -24,7 +24,7 @@ export class SvgTransformation extends MultiEnvStack {
           ),
         ],
 
-        memorySize: 1024,
+        memorySize: 2048,
         runtime: cdk.aws_lambda.Runtime.NODEJS_16_X,
         timeout: cdk.Duration.seconds(30),
       }
