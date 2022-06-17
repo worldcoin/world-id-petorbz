@@ -2,15 +2,15 @@ import chromium from "@sparticuz/chrome-aws-lambda";
 import { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from "aws-lambda";
 import playwright from "playwright-core";
 import { svgTemplate } from "./svg-template";
+import { svg } from "./types/svg";
 
 export const svgTransformation = async (
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => {
-  let name;
+  let input: { name: string; svgTemplate: svg };
 
   try {
-    // REVIEW It's probably too naive to use the path for the value of the name
-    name = decodeURI(event.rawPath.split("/")[1]);
+    input = JSON.parse(event.body || "");
   } catch {
     return { statusCode: 400, body: "Bad Request" };
   }
@@ -23,7 +23,10 @@ export const svgTransformation = async (
 
   const page = await browser.newPage();
 
-  await page.setContent(svgTemplate({ name }));
+  await page.setContent(
+    svgTemplate({ name: input.name, svg: input.svgTemplate })
+  );
+
   const screenshot = (await page.screenshot({ fullPage: true })).toString(
     "base64"
   );
