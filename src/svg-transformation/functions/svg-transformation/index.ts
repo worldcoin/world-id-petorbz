@@ -7,7 +7,6 @@ export const svgTransformation = async (
   event: APIGatewayProxyEventV2
 ): Promise<APIGatewayProxyResultV2> => {
   let name;
-  const dimensions = { height: 1024, width: 1024 };
 
   try {
     // REVIEW It's probably too naive to use the path for the value of the name
@@ -22,13 +21,12 @@ export const svgTransformation = async (
     headless: chromium.headless,
   });
 
-  const page = await browser.newPage({
-    screen: dimensions,
-    viewport: dimensions,
-  });
+  const page = await browser.newPage();
 
   await page.setContent(svgTemplate({ name }));
-  const screenshot = (await page.screenshot()).toString("base64");
+  const screenshot = (await page.screenshot({ fullPage: true })).toString(
+    "base64"
+  );
   await browser.close();
 
   return {
