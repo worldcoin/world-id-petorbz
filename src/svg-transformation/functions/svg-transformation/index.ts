@@ -27,6 +27,8 @@ export const svgTransformation = async (
     svgTemplate({ name: input.name, svg: input.svgTemplate })
   );
 
+  await page.waitForLoadState("networkidle");
+
   const screenshot = (await page.screenshot({ fullPage: true })).toString(
     "base64"
   );
