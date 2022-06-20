@@ -14,7 +14,7 @@ export const App = memo(function App() {
       <div
         className={cn(
           "absolute inset-0 -z-10 min-h-screen min-w-screen bg-[url(/public/images/lines.png)] mix-blend-lighten",
-          "bg-[position:60%_-220%] bg-no-repeat md:bg-center md:bg-cover",
+          "bg-[position:45%_-220%] bg-no-repeat md:bg-center md:bg-cover",
           "after:absolute after:inset-0 after:bg-[url(/public/images/wave.png)] after:mix-blend-lighten",
           "after:bg-[position:66%] md:after:bg-center after:bg-no-repeat after:bg-cover "
         )}
