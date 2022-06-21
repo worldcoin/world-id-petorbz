@@ -14,4 +14,3 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 /build/
-/tailwind.config.json
