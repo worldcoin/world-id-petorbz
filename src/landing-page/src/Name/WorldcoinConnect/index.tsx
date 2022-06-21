@@ -22,6 +22,7 @@ export const WorldcoinConnect = memo(function WorldcoinConnect(props: {
     }, 3500);
 
     return () => {
+      setIsConfirmed(false);
       clearTimeout(timer);
     };
   }, []);

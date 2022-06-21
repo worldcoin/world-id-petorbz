@@ -23,6 +23,7 @@ export const WalletConnect = memo(function WalletConnect(props: {
     }, 3500);
 
     return () => {
+      setIsConnected(false)
       clearTimeout(timer);
     };
   }, [props.show]);
@@ -36,7 +37,6 @@ export const WalletConnect = memo(function WalletConnect(props: {
       clearTimeout(timer);
       props.requestClose();
       props.onConfirm();
-      setIsConnected(false);
     }, 3500);
 
     return () => {
@@ -84,7 +84,7 @@ export const WalletConnect = memo(function WalletConnect(props: {
         <Fragment>
           <div className="grid items-center justify-between grid-flow-col auto-cols-max">
             <Icon className="w-8 h-8 text-df57bc animate-spin" name="loader" />
-            <CloseButton onClick={props.requestClose}/>
+            <CloseButton onClick={props.requestClose} />
           </div>
 
           <p className="text-ffffff text-[24px] leading-[1.3] font-sans font-medium">
