@@ -36,13 +36,6 @@ landingPageProject
   .tryFindObjectFile("package.json")
   ?.addOverride("eslintConfig.root", true);
 
-new SampleFile(landingPageProject, "postcss.config.js", {
-  sourcePath: "./templates/postcss.config.js",
-});
-new SampleFile(landingPageProject, "tailwind.config.js", {
-  sourcePath: "./templates/tailwind.config.js",
-});
-
 landingPageProject.addDeps("classnames");
 
 landingPageProject.addDevDeps(
