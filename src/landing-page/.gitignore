@@ -36,4 +36,3 @@ jspm_packages/
 /lib
 /dist/
 /build/
-!/tailwind.config.json
