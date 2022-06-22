@@ -1,33 +1,13 @@
-import {
-  Dispatch,
-  memo,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, memo, SetStateAction, useCallback } from "react";
 import cn from "classnames";
 import { ScreenType } from "../App";
 import { Header } from "../common/Header";
-import { Button } from "../common/Button";
 import { Footer } from "../common/Footer";
 import { WalletConnect } from "./WalletConnect";
 
 export const Intro = memo(function Intro(props: {
   setScreen: Dispatch<SetStateAction<ScreenType>>;
 }) {
-  const [isModalOpened, setIsModalOpened] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.style.overflow = isModalOpened ? "hidden" : "";
-
-    return () => {
-      document.documentElement.style.overflow = "";
-    };
-  }, [isModalOpened]);
-
-  const handleOpenModal = useCallback(() => setIsModalOpened(true), []);
-  const handleCloseModal = useCallback(() => setIsModalOpened(false), []);
   const handleWalletConfirm = useCallback(
     () => props.setScreen("name"),
     [props]
@@ -59,9 +39,7 @@ export const Intro = memo(function Intro(props: {
               alt=""
             />
 
-            <Button onClick={handleOpenModal} size="large" className="md:mt-12">
-              Connect Wallet to Claim
-            </Button>
+            <WalletConnect onConfirm={handleWalletConfirm} />
           </div>
 
           <Footer className="self-end" />
@@ -73,12 +51,6 @@ export const Intro = memo(function Intro(props: {
           alt=""
         />
       </div>
-      
-      <WalletConnect
-        show={isModalOpened}
-        requestClose={handleCloseModal}
-        onConfirm={handleWalletConfirm}
-      />
     </>
   );
 });
