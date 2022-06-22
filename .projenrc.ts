@@ -3,6 +3,8 @@ import { awscdk, javascript, SampleFile } from "projen";
 import { ReactTypeScriptProject } from "projen/lib/web";
 
 const project = new awscdk.AwsCdkTypeScriptApp({
+  context: { app: "petorbz", "@aws-cdk/core:bootstrapQualifier": "worldid" },
+  appEntrypoint: "index.ts",
   name: "petzobz-backend",
   license: "MIT",
   copyrightOwner: "Humanity Corporation",
@@ -13,7 +15,10 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   constructsVersion: "10.1.39",
   jest: false,
   github: false,
+  gitignore: [".DS_Store"],
   mergify: false,
+  deps: ["aws-lambda@1.0.7", "@types/aws-lambda@8.10.100"],
+  devDeps: ["cdk-nag@2.14.35"],
   prettier: true,
   srcdir: "src",
   testdir: "src",
