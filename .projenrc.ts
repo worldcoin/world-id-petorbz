@@ -45,7 +45,8 @@ landingPageProject.addDeps(
   "classnames",
   "@rainbow-me/rainbowkit",
   "wagmi",
-  "ethers"
+  "ethers",
+  "@worldcoin/id"
 );
 
 landingPageProject.addDevDeps(
