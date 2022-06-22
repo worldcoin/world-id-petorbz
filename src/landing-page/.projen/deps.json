@@ -55,7 +55,15 @@
       "type": "build"
     },
     {
+      "name": "@rainbow-me/rainbowkit",
+      "type": "runtime"
+    },
+    {
       "name": "classnames",
+      "type": "runtime"
+    },
+    {
+      "name": "ethers",
       "type": "runtime"
     },
     {
@@ -69,6 +77,10 @@
     {
       "name": "react-scripts",
       "version": "^5",
+      "type": "runtime"
+    },
+    {
+      "name": "wagmi",
       "type": "runtime"
     },
     {

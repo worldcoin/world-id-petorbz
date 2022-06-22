@@ -1,5 +1,5 @@
 import path from "path";
-import { awscdk, javascript, SampleFile } from "projen";
+import { awscdk, javascript } from "projen";
 import { ReactTypeScriptProject } from "projen/lib/web";
 
 const project = new awscdk.AwsCdkTypeScriptApp({
@@ -41,7 +41,12 @@ landingPageProject
   .tryFindObjectFile("package.json")
   ?.addOverride("eslintConfig.root", true);
 
-landingPageProject.addDeps("classnames");
+landingPageProject.addDeps(
+  "classnames",
+  "@rainbow-me/rainbowkit",
+  "wagmi",
+  "ethers"
+);
 
 landingPageProject.addDevDeps(
   "tailwindcss",
