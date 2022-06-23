@@ -12,7 +12,7 @@ export const WorldcoinConnect = memo(function WorldcoinConnect(props: {
   const worldIdReference = useRef<HTMLDivElement>(null);
 
   const armWLDID = useCallback(() => {
-    worldID.enable().then(props.onConfirm).then(armWLDID);
+    worldID.enable().then(props.onConfirm, armWLDID);
   }, [props.onConfirm]);
 
   useEffect(() => {
