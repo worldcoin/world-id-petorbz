@@ -1,4 +1,4 @@
-import { memo, useEffect, useLayoutEffect, useRef } from "react";
+import { memo, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import worldID, { VerificationResponse } from "@worldcoin/id";
 import { useAccount } from "wagmi";
 import { encode } from "./utils";
@@ -11,8 +11,13 @@ export const WorldcoinConnect = memo(function WorldcoinConnect(props: {
   const { data: account } = useAccount();
   const worldIdReference = useRef<HTMLDivElement>(null);
 
+  const armWLDID = useCallback(() => {
+    worldID.enable().then(props.onConfirm).then(armWLDID);
+  }, [props.onConfirm]);
+
   useEffect(() => {
-    worldID.enable().then(props.onConfirm);
+    armWLDID();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useLayoutEffect(() => {

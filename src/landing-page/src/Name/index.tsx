@@ -20,15 +20,13 @@ export const Name = memo(function Name() {
   const [proof, setProof] = useState<VerificationResponse | null>(null);
 
   const handleOpenKeyboard = useCallback(() => {
-    if (inputReference.current) {
-      inputReference.current.focus();
-    }
+    if (inputReference.current) inputReference.current.focus();
   }, []);
 
   // Handle keyboard to capture pet name
   useEffect(() => {
     const handleKeyboard = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey) return;
+      if (proof || e.ctrlKey || e.metaKey) return;
       if (e.key === "Backspace") return setName(name.slice(0, -1));
       if (e.key === "Delete") return setName(name.slice(1));
 
@@ -46,7 +44,7 @@ export const Name = memo(function Name() {
     return () => {
       window.removeEventListener("keydown", handleKeyboard);
     };
-  }, [name]);
+  }, [name, proof]);
 
   const [isClaimed, setIsClaimed] = useState(false);
 
@@ -105,15 +103,17 @@ export const Name = memo(function Name() {
           >
             {name || "Name me"}
 
-            <Icon
-              className={cn(
-                "text-ffffff absolute w-[9px] h-[46px] top-[18px] md:top-4 md:w-9 md:h-[200px] animate-pulse",
-                "duration-75",
-                { "left-0": name.length <= 0 },
-                { "left-full -translate-x-full": name.length > 0 }
-              )}
-              name="cursor"
-            />
+            {!proof && (
+              <Icon
+                className={cn(
+                  "text-ffffff absolute w-[9px] h-[46px] top-[18px] md:top-4 md:w-9 md:h-[200px] animate-pulse",
+                  "duration-75",
+                  { "left-0": name.length <= 0 },
+                  { "left-full -translate-x-full": name.length > 0 }
+                )}
+                name="cursor"
+              />
+            )}
           </span>
 
           {name.length > 0 && (
@@ -140,20 +140,14 @@ export const Name = memo(function Name() {
         <div className="grid px-5 md:px-0 mb-[110px] md:mb-0 gap-y-3 md:place-self-end justify-items-stretch">
           {!proof && (
             <WorldcoinConnect
-              className="z-20"
+              className={`z-20 transition ${
+                name.trim() === ""
+                  ? "cursor-not-allowed pointer-events-none opacity-30"
+                  : ""
+              }`}
               name={name}
               onConfirm={handleVerify}
             />
-            // <Button
-            //   className="justify-center hidden grid-flow-col md:grid place-items-center auto-cols-min whitespace-nowrap"
-            //   variant="blurred-gradient"
-            //   size="medium"
-            //   onClick={handleOpenModal}
-            // >
-            //   <span className="w-5 h-5 rounded-full border-[2px] border-ffffff" />
-            //   <span className="ml-3">I’m a unique person</span>
-            //   <Icon className="w-10 h-10 ml-5" noMask name="world-id" />
-            // </Button>
           )}
 
           {!isClaimed && (
@@ -162,7 +156,7 @@ export const Name = memo(function Name() {
                 "text-[20px]",
                 "!fixed bottom-0 left-0 right-0 z-10 rounded-bl-none rounded-br-none",
                 "md:!relative rounded-bl-lg rounded-br-lg",
-                { "cursor-default text-977cc0 cursor-not-allowed": !proof }
+                { "text-977cc0 cursor-not-allowed": !proof }
               )}
               variant={!proof ? "blurred" : "primary"}
               size="medium"
