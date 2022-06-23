@@ -4,7 +4,7 @@ import { ReactTypeScriptProject } from "projen/lib/web";
 
 const project = new awscdk.AwsCdkTypeScriptApp({
   context: { app: "petorbz", "@aws-cdk/core:bootstrapQualifier": "worldid" },
-  appEntrypoint: "index.ts",
+  appEntrypoint: "app.ts",
   name: "petzobz-backend",
   license: "MIT",
   copyrightOwner: "Humanity Corporation",
@@ -17,12 +17,17 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   github: false,
   gitignore: [".DS_Store"],
   mergify: false,
-  deps: ["aws-lambda@1.0.7", "@types/aws-lambda@8.10.100"],
-  devDeps: ["cdk-nag@2.14.35"],
+  deps: ["@sparticuz/chrome-aws-lambda"],
+  devDeps: ["@types/aws-lambda"],
   prettier: true,
   srcdir: "src",
   testdir: "src",
 });
+
+project.tsconfig?.file.addOverride("compilerOptions.target", "es2021");
+project.tsconfigDev?.file.addOverride("compilerOptions.target", "es2021");
+project.tsconfig?.compilerOptions.lib?.push("es2021");
+project.tsconfigDev?.compilerOptions.lib?.push("es2021");
 
 const landingPageProject = new ReactTypeScriptProject({
   parent: project,
