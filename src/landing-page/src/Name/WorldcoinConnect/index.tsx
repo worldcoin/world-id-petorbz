@@ -18,7 +18,7 @@ export const WorldcoinConnect = memo(function WorldcoinConnect(props: {
   useLayoutEffect(() => {
     const options = {
       enable_telemetry: true,
-      action_id: process.env.WLD_SIGNAL as string,
+      action_id: process.env.REACT_APP_WLD_SIGNAL as string,
       signal: encode(account?.address as string, props.name),
       advanced_use_raw_signal: true,
     };

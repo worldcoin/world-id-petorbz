@@ -14,7 +14,10 @@ import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider } = configureChains(
   [chain.polygonMumbai, chain.polygon],
-  [infuraProvider({ infuraId: process.env.INFURA_ID }), publicProvider()]
+  [
+    infuraProvider({ infuraId: process.env.REACT_APP_INFURA_ID }),
+    publicProvider(),
+  ]
 );
 
 const { connectors } = getDefaultWallets({ appName: "PetOrbz", chains });

@@ -24,7 +24,7 @@ export const Name = memo(function Name() {
   const [proof, setProof] = useState<VerificationResponse | null>(null);
   const { data: nextId } = useContractRead(
     {
-      addressOrName: process.env.PETORBZ_ADDRESS as string,
+      addressOrName: process.env.REACT_APP_PETORBZ_ADDRESS as string,
       contractInterface: PetOrbz,
     },
     "nextTokenId"
@@ -32,7 +32,7 @@ export const Name = memo(function Name() {
 
   const { writeAsync: mintOrb, isLoading } = useContractWrite(
     {
-      addressOrName: process.env.PETORBZ_ADDRESS as string,
+      addressOrName: process.env.REACT_APP_PETORBZ_ADDRESS as string,
       contractInterface: PetOrbz,
     },
     "adopt",
