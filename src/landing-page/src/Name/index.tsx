@@ -13,11 +13,50 @@ import { Footer } from "../common/Footer";
 import { Icon } from "../common/Icon";
 import { WorldcoinConnect } from "./WorldcoinConnect";
 import { VerificationResponse } from "@worldcoin/id";
+import PetOrbz from "../abi/PetOrbz.json";
+import { defaultAbiCoder as abi } from "ethers/lib/utils";
+import { useAccount, useContractRead, useContractWrite } from "wagmi";
 
 export const Name = memo(function Name() {
+  const { data: account } = useAccount();
   const inputReference = useRef<HTMLInputElement>(null);
   const [name, setName] = useState<string>("");
   const [proof, setProof] = useState<VerificationResponse | null>(null);
+  const { data: nextId } = useContractRead(
+    {
+      addressOrName: "0x146fECa7FCEA1227922a3a84d836199163E0F9a2", //process.env.PETORBZ_ADDRESS as string,
+      contractInterface: PetOrbz,
+    },
+    "nextTokenId"
+  );
+
+  console.log(
+    proof && abi.decode(["uint256"], proof?.merkle_root as string)?.[0],
+    proof && abi.decode(["uint256"], proof?.nullifier_hash as string)?.[0],
+    proof && abi.decode(["uint256[8]"], proof?.proof as string)?.[0]
+  );
+
+  const { writeAsync: mintOrb, isLoading } = useContractWrite(
+    {
+      addressOrName: "0x146fECa7FCEA1227922a3a84d836199163E0F9a2", //process.env.PETORBZ_ADDRESS as string,
+      contractInterface: PetOrbz,
+    },
+    "adopt",
+    {
+      args: [
+        account?.address,
+        name,
+        proof && abi.decode(["uint256"], proof?.merkle_root as string)?.[0],
+        proof && abi.decode(["uint256"], proof?.nullifier_hash as string)?.[0],
+        proof && abi.decode(["uint256[8]"], proof?.proof as string)?.[0],
+      ],
+      onError(error) {
+        console.log(error);
+
+        alert("Something went wrong! Please try again");
+      },
+    }
+  );
 
   const handleOpenKeyboard = useCallback(() => {
     if (inputReference.current) inputReference.current.focus();
@@ -55,8 +94,8 @@ export const Name = memo(function Name() {
   const handleClaim = useCallback(() => {
     if (!proof) return;
 
-    setIsClaimed(true);
-  }, [proof]);
+    mintOrb().then(() => setIsClaimed(true));
+  }, [mintOrb, proof]);
 
   return (
     <Fragment>
@@ -116,14 +155,14 @@ export const Name = memo(function Name() {
             )}
           </span>
 
-          {name.length > 0 && (
+          {name.length > 0 && nextId && (
             <span
               className={cn(
                 "absolute top-0 md:-translate-x-full right-0 md:right-16 text-20b078 text-[24px] leading-[1.6]",
                 "font-medium font-sans"
               )}
             >
-              #001
+              #{nextId.toString().padStart(3, "0")}
             </span>
           )}
 
@@ -156,7 +195,10 @@ export const Name = memo(function Name() {
                 "text-[20px]",
                 "!fixed bottom-0 left-0 right-0 z-10 rounded-bl-none rounded-br-none",
                 "md:!relative rounded-bl-lg rounded-br-lg",
-                { "text-977cc0 cursor-not-allowed": !proof }
+                {
+                  "text-977cc0 cursor-not-allowed": !proof,
+                  "animate-pulse cursor-wait pointer-events-none": isLoading,
+                }
               )}
               variant={!proof ? "blurred" : "primary"}
               size="medium"
