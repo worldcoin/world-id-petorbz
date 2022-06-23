@@ -24,21 +24,15 @@ export const Name = memo(function Name() {
   const [proof, setProof] = useState<VerificationResponse | null>(null);
   const { data: nextId } = useContractRead(
     {
-      addressOrName: "0x146fECa7FCEA1227922a3a84d836199163E0F9a2", //process.env.PETORBZ_ADDRESS as string,
+      addressOrName: process.env.PETORBZ_ADDRESS as string,
       contractInterface: PetOrbz,
     },
     "nextTokenId"
   );
 
-  console.log(
-    proof && abi.decode(["uint256"], proof?.merkle_root as string)?.[0],
-    proof && abi.decode(["uint256"], proof?.nullifier_hash as string)?.[0],
-    proof && abi.decode(["uint256[8]"], proof?.proof as string)?.[0]
-  );
-
   const { writeAsync: mintOrb, isLoading } = useContractWrite(
     {
-      addressOrName: "0x146fECa7FCEA1227922a3a84d836199163E0F9a2", //process.env.PETORBZ_ADDRESS as string,
+      addressOrName: process.env.PETORBZ_ADDRESS as string,
       contractInterface: PetOrbz,
     },
     "adopt",
@@ -205,17 +199,6 @@ export const Name = memo(function Name() {
               onClick={handleClaim}
             >
               Claim my PetOrb
-            </Button>
-          )}
-
-          {isClaimed && (
-            <Button
-              className="grid items-center justify-center grid-flow-col auto-cols-max gap-x-6 text-[18px]"
-              variant="blurred-gradient-two"
-              size="medium"
-            >
-              <Icon className="w-5 h-6" noMask name="share" />
-              Share my NFT
             </Button>
           )}
 
