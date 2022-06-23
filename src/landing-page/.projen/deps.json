@@ -59,6 +59,10 @@
       "type": "runtime"
     },
     {
+      "name": "@worldcoin/id",
+      "type": "runtime"
+    },
+    {
       "name": "classnames",
       "type": "runtime"
     },

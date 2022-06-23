@@ -12,21 +12,21 @@ import { Header } from "../common/Header";
 import { Footer } from "../common/Footer";
 import { Icon } from "../common/Icon";
 import { WorldcoinConnect } from "./WorldcoinConnect";
+import { VerificationResponse } from "@worldcoin/id";
 
 export const Name = memo(function Name() {
   const inputReference = useRef<HTMLInputElement>(null);
   const [name, setName] = useState<string>("");
+  const [proof, setProof] = useState<VerificationResponse | null>(null);
 
   const handleOpenKeyboard = useCallback(() => {
-    if (inputReference.current) {
-      inputReference.current.focus();
-    }
+    if (inputReference.current) inputReference.current.focus();
   }, []);
 
   // Handle keyboard to capture pet name
   useEffect(() => {
     const handleKeyboard = (e: KeyboardEvent) => {
-      if (e.ctrlKey || e.metaKey) return;
+      if (proof || e.ctrlKey || e.metaKey) return;
       if (e.key === "Backspace") return setName(name.slice(0, -1));
       if (e.key === "Delete") return setName(name.slice(1));
 
@@ -44,45 +44,25 @@ export const Name = memo(function Name() {
     return () => {
       window.removeEventListener("keydown", handleKeyboard);
     };
-  }, [name]);
+  }, [name, proof]);
 
-  const [isModalOpened, setIsModalOpened] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
   const [isClaimed, setIsClaimed] = useState(false);
 
-  // Open connect on mobile
-  useEffect(() => {
-    if (window.innerWidth <= 768) {
-      setIsModalOpened(true);
-    }
-  }, []);
-
-  const handleOpenModal = useCallback(() => {
-    setIsModalOpened(true);
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setIsModalOpened(false);
-  }, []);
-
-  const handleConnect = useCallback(() => {
-    setIsConnected(true);
-    setIsModalOpened(false);
+  const handleVerify = useCallback((proof: VerificationResponse) => {
+    setProof(proof);
   }, []);
 
   const handleClaim = useCallback(() => {
-    if (!isConnected) {
-      return;
-    }
+    if (!proof) return;
 
     setIsClaimed(true);
-  }, [isConnected]);
+  }, [proof]);
 
   return (
     <Fragment>
       <div className="grid h-full pt-2 pb-2 md:pt-8 md:pb-12 grid-rows-auto/1fr/auto gap-y-3 md:gap-y-12">
         <Header className="gap-y-4.5">
-          {isConnected && (
+          {proof && (
             <Button
               className={cn(
                 "grid grid-flow-col gap-x-3 mt-5 items-center md:hidden bg-fff !backdrop-blur-none text-default",
@@ -94,9 +74,7 @@ export const Name = memo(function Name() {
               <span className="relative w-6 h-6 rounded-full bg-217237">
                 <Icon className="absolute inset-2" name="check" />
               </span>
-
               Verified with
-
               <Icon className="h-8 ml-6 w-9" noMask name="world-id" />
             </Button>
           )}
@@ -116,7 +94,7 @@ export const Name = memo(function Name() {
           onClick={handleOpenKeyboard}
         >
           <input ref={inputReference} className="absolute -top-[200vh]" />
-          
+
           <span
             className={cn(
               "relative max-w-full px-5 md:px-16 overflow-hidden font-serif text-transparent text-gradient-dark",
@@ -125,15 +103,17 @@ export const Name = memo(function Name() {
           >
             {name || "Name me"}
 
-            <Icon
-              className={cn(
-                "text-ffffff absolute w-[9px] h-[46px] top-[18px] md:top-4 md:w-9 md:h-[200px] animate-pulse",
-                "duration-75",
-                { "left-0": name.length <= 0 },
-                { "left-full -translate-x-full": name.length > 0 }
-              )}
-              name="cursor"
-            />
+            {!proof && (
+              <Icon
+                className={cn(
+                  "text-ffffff absolute w-[9px] h-[46px] top-[18px] md:top-4 md:w-9 md:h-[200px] animate-pulse",
+                  "duration-75",
+                  { "left-0": name.length <= 0 },
+                  { "left-full -translate-x-full": name.length > 0 }
+                )}
+                name="cursor"
+              />
+            )}
           </span>
 
           {name.length > 0 && (
@@ -150,7 +130,7 @@ export const Name = memo(function Name() {
           <img
             className={cn(
               "absolute -translate-x-1/2 top-12 md:top-1/4 left-1/2 bg-ffffff/02",
-              { "top-20": isConnected }
+              { "top-20": proof }
             )}
             src="/images/pet.png"
             alt=""
@@ -158,17 +138,16 @@ export const Name = memo(function Name() {
         </div>
 
         <div className="grid px-5 md:px-0 mb-[110px] md:mb-0 gap-y-3 md:place-self-end justify-items-stretch">
-          {!isConnected && (
-            <Button
-              className="justify-center hidden grid-flow-col md:grid place-items-center auto-cols-min whitespace-nowrap"
-              variant="blurred-gradient"
-              size="medium"
-              onClick={handleOpenModal}
-            >
-              <span className="w-5 h-5 rounded-full border-[2px] border-ffffff" />
-              <span className="ml-3">I’m a unique person</span>
-              <Icon className="w-10 h-10 ml-5" noMask name="world-id" />
-            </Button>
+          {!proof && (
+            <WorldcoinConnect
+              className={`z-20 transition ${
+                name.trim() === ""
+                  ? "cursor-not-allowed pointer-events-none opacity-30"
+                  : ""
+              }`}
+              name={name}
+              onConfirm={handleVerify}
+            />
           )}
 
           {!isClaimed && (
@@ -176,10 +155,10 @@ export const Name = memo(function Name() {
               className={cn(
                 "text-[20px]",
                 "!fixed bottom-0 left-0 right-0 z-10 rounded-bl-none rounded-br-none",
-                "md:!relative rounded-bl-lg rounded-br-lg", 
-                {"cursor-default text-977cc0": !isConnected}
+                "md:!relative rounded-bl-lg rounded-br-lg",
+                { "text-977cc0 cursor-not-allowed": !proof }
               )}
-              variant={!isConnected ? "blurred" : "primary"}
+              variant={!proof ? "blurred" : "primary"}
               size="medium"
               onClick={handleClaim}
             >
@@ -187,20 +166,22 @@ export const Name = memo(function Name() {
             </Button>
           )}
 
-          <Button
-            className="grid items-center justify-center grid-flow-col auto-cols-max gap-x-6 text-[18px]"
-            variant="blurred-gradient-two"
-            size="medium"
-          >
-            <Icon className="w-5 h-6" noMask name="share" />
-            Share my NFT
-          </Button>
+          {isClaimed && (
+            <Button
+              className="grid items-center justify-center grid-flow-col auto-cols-max gap-x-6 text-[18px]"
+              variant="blurred-gradient-two"
+              size="medium"
+            >
+              <Icon className="w-5 h-6" noMask name="share" />
+              Share my NFT
+            </Button>
+          )}
 
           {isClaimed && (
             <Button
               className={cn(
                 "!fixed bottom-0 left-0 right-0 z-10 rounded-bl-none rounded-br-none",
-                "md:!relative rounded-bl-lg rounded-br-lg", 
+                "md:!relative rounded-bl-lg rounded-br-lg"
               )}
               variant="blurred-success"
               size="medium"
@@ -212,14 +193,6 @@ export const Name = memo(function Name() {
           <Footer className="hidden mt-6 md:grid justify-self-center md:justify-self-end" />
         </div>
       </div>
-
-      {isModalOpened && (
-        <WorldcoinConnect
-          show={isModalOpened}
-          requestClose={handleCloseModal}
-          onConfirm={handleConnect}
-        />
-      )}
     </Fragment>
   );
 });
