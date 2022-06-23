@@ -1,3 +1,4 @@
+import path from "path";
 import { CfnOutput, Duration, Stack, StackProps } from "aws-cdk-lib";
 import {
   FunctionUrlAuthType,
@@ -7,12 +8,35 @@ import {
   Tracing,
 } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
+// import { HostedZone } from "aws-cdk-lib/aws-route53";
 import { Construct } from "constructs";
+import { FrontEndStack } from "./frontend";
 
 export class PetOrbz extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // const hostedZone = new HostedZone(this, "HostedZone", {
+    //   zoneName: this.node.tryGetContext("zone_name"),
+    //   comment: `Hosted zone for ${this.stackName} stack`,
+    // });
+
+    //#region Front-end resources
+    const frontend = new FrontEndStack(this, `${this.stackName}-frontend`, {
+      // hostedZone,
+      frontendPath: path.resolve(__dirname, "./landing-page"),
+      environment: {
+        REACT_APP_INFURA_ID: this.node.tryGetContext("infura_id"),
+        REACT_APP_PETORBZ_ADDRESS: this.node.tryGetContext("petorbz_address"),
+        REACT_APP_WLD_SIGNAL: this.node.tryGetContext("wld_signal"),
+      },
+    });
+    new CfnOutput(this, "FrontEndWebsiteUrl", {
+      value: frontend.websiteUrl,
+    });
+    //#endregion Front-end
+
+    //#region Backend resources
     const lambda = new NodejsFunction(this, "svg-transform", {
       bundling: {
         target: "node16.14",
@@ -50,5 +74,6 @@ export class PetOrbz extends Stack {
     new CfnOutput(this, "svg-transformation-function-url", {
       value: functionUrl.url,
     });
+    //#endregion Backend resources
   }
 }
