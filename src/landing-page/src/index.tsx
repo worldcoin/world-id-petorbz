@@ -14,7 +14,7 @@ const { chains, provider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({ appName: "PetOrbz", chains });
-const wagmiClient = createClient({ autoConnect: true, connectors, provider });
+const wagmiClient = createClient({ autoConnect: false, connectors, provider });
 
 const root = createRoot(document.getElementById("root")!);
 
