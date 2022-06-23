@@ -9,7 +9,7 @@
   "watch": {
     "include": [
       "src/**/*.ts",
-      "src/**/*.ts"
+      "test/**/*.ts"
     ],
     "exclude": [
       "README.md",

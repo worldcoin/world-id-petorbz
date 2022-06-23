@@ -46,6 +46,10 @@
       "type": "build"
     },
     {
+      "name": "react-app-rewired",
+      "type": "build"
+    },
+    {
       "name": "tailwindcss",
       "type": "build"
     },
@@ -60,6 +64,10 @@
     },
     {
       "name": "@worldcoin/id",
+      "type": "runtime"
+    },
+    {
+      "name": "buffer",
       "type": "runtime"
     },
     {

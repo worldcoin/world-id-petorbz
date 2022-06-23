@@ -33,6 +33,7 @@ jspm_packages/
 !/.projenrc.js
 !/.prettierignore
 !/.prettierrc.json
+!/test/
 !/tsconfig.json
 !/tsconfig.dev.json
 !/src/

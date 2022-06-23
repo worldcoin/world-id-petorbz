@@ -1,7 +1,7 @@
 {
   "name": "landing-page",
   "scripts": {
-    "build": "npx projen build",
+    "build": "react-app-rewired build --scripts-version react-scripts",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
     "default": "npx projen default",
@@ -10,9 +10,10 @@
     "package": "npx projen package",
     "post-compile": "npx projen post-compile",
     "pre-compile": "npx projen pre-compile",
-    "test": "npx projen test",
+    "test": "react-app-rewired test --env=jsdom --scripts-version react-scripts",
     "watch": "npx projen watch",
-    "projen": "npx projen"
+    "projen": "npx projen",
+    "start": "react-app-rewired start --scripts-version react-scripts"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",
@@ -26,12 +27,14 @@
     "postcss": "^8.4.14",
     "prettier-plugin-tailwindcss": "^0.1.11",
     "projen": "^0.58.12",
+    "react-app-rewired": "^2.2.1",
     "tailwindcss": "^3.1.2",
     "typescript": "^4.7"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "*",
     "@worldcoin/id": "^0.3.0",
+    "buffer": "^6.0.3",
     "classnames": "^2.3.1",
     "ethers": "^5.6.9",
     "react": "^18.1.0",

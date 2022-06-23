@@ -12,6 +12,12 @@ export class SvgTransformation extends MultiEnvStack {
       {
         bundling: {
           externalModules: ["@sparticuz/chrome-aws-lambda", "./appIcon.png"],
+          sourceMap: true,
+          sourcesContent: false,
+          target: "node16.14",
+        },
+        environment: {
+          NODE_OPTIONS: "--enable-source-maps",
         },
         entry: "src/svg-transformation/functions/svg-transformation/index.ts",
         handler: "svgTransformation",

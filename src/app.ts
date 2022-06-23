@@ -2,7 +2,6 @@ import assert from "assert";
 import * as cdk from "aws-cdk-lib";
 import { AwsSolutionsChecks } from "cdk-nag";
 import { Construct } from "constructs";
-import { MultiEnvStack } from "./common/multi-env-stack";
 import { SvgTransformation } from "./svg-transformation";
 
 export class Petorbz extends MultiEnvStack {
