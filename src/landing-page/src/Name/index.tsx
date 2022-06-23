@@ -162,7 +162,7 @@ export const Name = memo(function Name() {
               size="medium"
               onClick={handleClaim}
             >
-              Claim my PetOrb
+              Complete Adoption
             </Button>
           )}
 

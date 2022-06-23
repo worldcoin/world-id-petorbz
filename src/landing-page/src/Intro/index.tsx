@@ -26,11 +26,13 @@ export const Intro = memo(function Intro(props: {
                 "text-transparent bg-clip-text"
               )}
             >
-              Let’s adopt your own PetOrb
+              Adopt a Pet Orb
             </h1>
 
             <p className="mt-6 text-center md:text-left text-22 text-c2a4e5">
-              Lorem ipsum, dolor sit amet, consectetur adipisicing elit.
+              Meet Pet Orbz. They love to cuddle, and will protect you from
+              sybil attacks. Five hundred of them are visiting ETH NYC, and need
+              a loving home.
             </p>
 
             <img
