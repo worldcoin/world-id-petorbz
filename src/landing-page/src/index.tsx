@@ -1,3 +1,7 @@
+/* eslint-disable import/first */
+import { Buffer } from "buffer";
+// @ts-ignore
+window.Buffer = Buffer;
 import React from "react";
 import { createRoot } from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
@@ -10,11 +14,14 @@ import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider } = configureChains(
   [chain.polygonMumbai, chain.polygon],
-  [infuraProvider({ infuraId: process.env.INFURA_ID }), publicProvider()]
+  [
+    infuraProvider({ infuraId: process.env.REACT_APP_INFURA_ID }),
+    publicProvider(),
+  ]
 );
 
 const { connectors } = getDefaultWallets({ appName: "PetOrbz", chains });
-const wagmiClient = createClient({ autoConnect: true, connectors, provider });
+const wagmiClient = createClient({ autoConnect: false, connectors, provider });
 
 const root = createRoot(document.getElementById("root")!);
 

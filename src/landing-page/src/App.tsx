@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import cn from "classnames";
 import { Intro } from "./Intro";
 import { Name } from "./Name";
@@ -7,6 +7,10 @@ export type ScreenType = "intro" | "name";
 
 export const App = memo(function App() {
   const [screen, setScreen] = useState<ScreenType>("intro");
+
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
 
   return (
     <main className="bg-1b0f2c grid grid-cols-1fr/minmax(0/360)/1fr px-6 text-ffffff h-screen overflow-hidden">
