@@ -37,7 +37,7 @@ export const WalletConnect = memo(function WalletConnect(props: {
                     size="large"
                     className="md:mt-12"
                   >
-                    Connect wallet to adopt
+                    Connect wallet to adopt one
                   </Button>
                 );
               }

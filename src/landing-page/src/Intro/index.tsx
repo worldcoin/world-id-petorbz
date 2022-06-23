@@ -31,7 +31,7 @@ export const Intro = memo(function Intro(props: {
 
             <p className="mt-6 text-center md:text-left text-22 text-c2a4e5">
               Meet Pet Orbz. They love to cuddle, and will protect you from
-              sybil attacks. Five hundred of them are visiting ETH NYC, and need
+              sybil attacks. Five hundred of them are visiting ETH NYC and need
               a loving home.
             </p>
 
