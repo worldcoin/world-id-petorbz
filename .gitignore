@@ -31,6 +31,8 @@ jspm_packages/
 .cache
 .DS_Store
 !/.projenrc.js
+!/.github/workflows/build.yml
+!/.github/pull_request_template.md
 !/.prettierignore
 !/.prettierrc.json
 !/tsconfig.json
@@ -44,3 +46,4 @@ jspm_packages/
 /cdk.out/
 .cdk.staging/
 .parcel-cache/
+!/.github/workflows/deploy.yml

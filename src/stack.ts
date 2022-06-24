@@ -13,7 +13,11 @@ import { Construct } from "constructs";
 import { StaticWebsite } from "./frontend";
 
 export class PetOrbz extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(
+    scope: Construct,
+    id: string,
+    props?: StackProps & { domainName?: string }
+  ) {
     super(scope, id, props);
 
     let hostedZone: IHostedZone | undefined;
