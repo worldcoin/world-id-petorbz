@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@types/aws-lambda",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^14",
       "type": "build"
@@ -18,11 +22,6 @@
     {
       "name": "aws-cdk",
       "version": "^2.27.0",
-      "type": "build"
-    },
-    {
-      "name": "cdk-nag",
-      "version": "2.14.35",
       "type": "build"
     },
     {
@@ -80,18 +79,12 @@
       "type": "build"
     },
     {
-      "name": "@types/aws-lambda",
-      "version": "8.10.100",
+      "name": "@sparticuz/chrome-aws-lambda",
       "type": "runtime"
     },
     {
       "name": "aws-cdk-lib",
       "version": "^2.27.0",
-      "type": "runtime"
-    },
-    {
-      "name": "aws-lambda",
-      "version": "1.0.7",
       "type": "runtime"
     },
     {

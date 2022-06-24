@@ -1,8 +1,11 @@
 {
-  "app": "npx ts-node -P tsconfig.json --prefer-ts-exts src/index.ts",
+  "app": "npx ts-node -P tsconfig.json --prefer-ts-exts src/app.ts",
   "context": {
     "app": "petorbz",
-    "@aws-cdk/core:bootstrapQualifier": "worldid"
+    "@aws-cdk/core:bootstrapQualifier": "worldid",
+    "infura_id": "7a5d08b9ebe14d6690adebed05e77e83",
+    "petorbz_address": "0x9230211f4678365beca1c243b336843ff62751fd",
+    "wld_signal": "wid_d431510b467e07999228ccf880d80ad2"
   },
   "output": "cdk.out",
   "build": "npx projen bundle",

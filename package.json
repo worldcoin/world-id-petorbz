@@ -23,11 +23,11 @@
     "projen": "npx projen"
   },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.100",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-cdk": "^2.27.0",
-    "cdk-nag": "2.14.35",
     "esbuild": "^0.14.43",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
@@ -43,9 +43,8 @@
     "typescript": "^4.7.3"
   },
   "dependencies": {
-    "@types/aws-lambda": "8.10.100",
+    "@sparticuz/chrome-aws-lambda": "^14.4.1",
     "aws-cdk-lib": "^2.27.0",
-    "aws-lambda": "1.0.7",
     "constructs": "^10.1.39"
   },
   "license": "MIT",
