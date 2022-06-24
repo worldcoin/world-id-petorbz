@@ -63,6 +63,10 @@
       "type": "runtime"
     },
     {
+      "name": "buffer",
+      "type": "runtime"
+    },
+    {
       "name": "classnames",
       "type": "runtime"
     },

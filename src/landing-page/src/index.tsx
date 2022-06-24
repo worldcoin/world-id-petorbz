@@ -1,3 +1,7 @@
+/* eslint-disable import/first */
+import { Buffer } from "buffer";
+// @ts-ignore
+window.Buffer = Buffer;
 import React from "react";
 import { createRoot } from "react-dom/client";
 import reportWebVitals from "./reportWebVitals";
@@ -17,7 +21,7 @@ const { chains, provider } = configureChains(
 );
 
 const { connectors } = getDefaultWallets({ appName: "PetOrbz", chains });
-const wagmiClient = createClient({ autoConnect: true, connectors, provider });
+const wagmiClient = createClient({ autoConnect: false, connectors, provider });
 
 const root = createRoot(document.getElementById("root")!);
 

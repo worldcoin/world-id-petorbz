@@ -9,7 +9,9 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "lib": [
-      "es2019"
+      "es2019",
+      "es2021",
+      "es2021"
     ],
     "module": "CommonJS",
     "noEmitOnError": false,
@@ -24,7 +26,7 @@
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
     "stripInternal": true,
-    "target": "ES2019"
+    "target": "es2021"
   },
   "include": [
     "src/**/*.ts"
