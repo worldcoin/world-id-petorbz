@@ -13,7 +13,7 @@ import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
 
 const { chains, provider } = configureChains(
-  [chain.polygonMumbai, chain.polygon],
+  [chain.polygon],
   [
     infuraProvider({ infuraId: process.env.REACT_APP_INFURA_ID }),
     publicProvider(),
