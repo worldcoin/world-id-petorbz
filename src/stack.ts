@@ -8,22 +8,25 @@ import {
   Tracing,
 } from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
-// import { HostedZone } from "aws-cdk-lib/aws-route53";
+import { HostedZone, IHostedZone } from "aws-cdk-lib/aws-route53";
 import { Construct } from "constructs";
-import { FrontEndStack } from "./frontend";
+import { StaticWebsite } from "./frontend";
 
 export class PetOrbz extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // const hostedZone = new HostedZone(this, "HostedZone", {
-    //   zoneName: this.node.tryGetContext("zone_name"),
-    //   comment: `Hosted zone for ${this.stackName} stack`,
-    // });
+    let hostedZone: IHostedZone | undefined;
+    const domainName = this.node.tryGetContext("domain_name");
+    if (domainName) {
+      hostedZone = HostedZone.fromLookup(this, "HostedZoneId", {
+        domainName,
+      });
+    }
 
     //#region Front-end resources
-    const frontend = new FrontEndStack(this, `${this.stackName}-frontend`, {
-      // hostedZone,
+    const frontend = new StaticWebsite(this, `${this.stackName}-frontend`, {
+      hostedZone,
       frontendPath: path.resolve(__dirname, "./landing-page"),
       environment: {
         REACT_APP_INFURA_ID: this.node.tryGetContext("infura_id"),
@@ -59,7 +62,7 @@ export class PetOrbz extends Stack {
 
       memorySize: 2048,
       runtime: Runtime.NODEJS_16_X,
-      timeout: Duration.minutes(2),
+      timeout: Duration.minutes(1),
       environment: {
         NODE_MODULE: "--enable-source-maps",
       },

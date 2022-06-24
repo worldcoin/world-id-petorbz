@@ -1,35 +1,39 @@
 import { execSync } from "node:child_process";
+
 import {
   DockerImage,
-  NestedStack,
+  Duration,
+  Fn,
   RemovalPolicy,
   Stack,
   type BundlingOptions,
   type ILocalBundling,
-  type NestedStackProps,
 } from "aws-cdk-lib";
-// import {
-//   CertificateValidation,
-//   DnsValidatedCertificate,
-// } from "aws-cdk-lib/aws-certificatemanager";
-// import {
-//   AllowedMethods,
-//   Distribution,
-//   PriceClass,
-//   ViewerProtocolPolicy,
-// } from "aws-cdk-lib/aws-cloudfront";
-// import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import {
-  //   ARecord,
-  //   RecordTarget,
+  Certificate,
+  CertificateValidation,
+  ICertificate,
+} from "aws-cdk-lib/aws-certificatemanager";
+import {
+  AllowedMethods,
+  Distribution,
+  ViewerProtocolPolicy,
+  OriginAccessIdentity,
+} from "aws-cdk-lib/aws-cloudfront";
+import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
+import { RetentionDays } from "aws-cdk-lib/aws-logs";
+import {
+  ARecord,
+  RecordTarget,
   type IHostedZone,
 } from "aws-cdk-lib/aws-route53";
-// import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
+import { CloudFrontTarget } from "aws-cdk-lib/aws-route53-targets";
+import { BlockPublicAccess, Bucket } from "aws-cdk-lib/aws-s3";
 import {
-  // BlockPublicAccess,
-  Bucket,
-} from "aws-cdk-lib/aws-s3";
-import { BucketDeployment, Source } from "aws-cdk-lib/aws-s3-deployment";
+  BucketDeployment,
+  CacheControl,
+  Source,
+} from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
 
 class CraBundle implements ILocalBundling {
@@ -61,77 +65,80 @@ class CraBundle implements ILocalBundling {
   }
 }
 
-export class FrontEndStack extends NestedStack {
+export class StaticWebsite extends Construct {
   readonly websiteUrl: string;
 
   constructor(
     scope: Construct,
     id: string,
-    props: NestedStackProps & {
+    props: {
       frontendPath: string;
       environment: Record<string, string>;
       hostedZone?: IHostedZone;
     }
   ) {
-    super(scope, id, props);
+    super(scope, id);
 
     const { stackName } = Stack.of(scope);
-    // const { hostedZone } = props;
+    const { hostedZone } = props;
 
-    // const certificate = new DnsValidatedCertificate(
-    //   scope,
-    //   `${stackName}Certificate`,
-    //   {
-    //     domainName: hostedZone.zoneName,
-    //     hostedZone,
-    //     region: "us-east-1", // Cloudfront only checks this region for certificates.
-    //     cleanupRoute53Records: true,
-    //   }
-    // );
+    let certificate: ICertificate | undefined;
+    let domainNames: string[] | undefined;
+    if (hostedZone) {
+      certificate = new Certificate(
+        this,
+        `${stackName}-"CertificateManagerCertificate`,
+        {
+          domainName: hostedZone.zoneName,
+          validation: CertificateValidation.fromDns(hostedZone),
+        }
+      );
+      domainNames = [hostedZone.zoneName];
+    }
 
     // Create S3 Bucket for our website static assets
-    const siteBucket = new Bucket(this, `${stackName}FrontendBucket`, {
+    const siteBucket = new Bucket(this, `${stackName}-WebsiteBucket`, {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
-      // FIXME remove when hosted zone will be set
-      //   blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      websiteIndexDocument: "index.html",
-      websiteErrorDocument: "index.html",
-      publicReadAccess: true,
+      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
     });
-    this.websiteUrl = siteBucket.bucketWebsiteUrl;
 
-    // const distribution = new Distribution(this, `${stackName}Distribution`, {
-    //   defaultBehavior: {
-    //     origin: new S3Origin(siteBucket),
-    //     compress: true,
-    //     allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
-    //     viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-    //   },
-    //   certificate,
-    //   defaultRootObject: "/index.html",
-    //   domainNames: [hostedZone.zoneName],
-    //   enableLogging: true,
-    //   logIncludesCookies: true,
-    //   priceClass: PriceClass.PRICE_CLASS_ALL,
-    //   errorResponses: [
-    //     {
-    //       httpStatus: 403,
-    //       responseHttpStatus: 200,
-    //       responsePagePath: "/index.html",
-    //     },
-    //     {
-    //       httpStatus: 404,
-    //       responseHttpStatus: 200,
-    //       responsePagePath: "/index.html",
-    //     },
-    //   ],
-    // });
+    const originAccessIdentity = new OriginAccessIdentity(
+      this,
+      "OriginAccessIdentity"
+    );
+    siteBucket.grantRead(originAccessIdentity);
 
-    // new ARecord(this, `${stackName}StageDomainAlias`, {
-    //   zone: hostedZone,
-    //   target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
-    // });
+    const distribution = new Distribution(this, `${stackName}-Distribution`, {
+      defaultBehavior: {
+        origin: new S3Origin(siteBucket, { originAccessIdentity }),
+        allowedMethods: AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
+        viewerProtocolPolicy: ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      },
+      certificate,
+      domainNames,
+      defaultRootObject: "/index.html",
+      enableLogging: true,
+      logIncludesCookies: true,
+      errorResponses: [
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: "/index.html",
+        },
+      ],
+    });
+    this.websiteUrl = Fn.join("//", [
+      "https:",
+      hostedZone ? hostedZone.zoneName : distribution.distributionDomainName,
+    ]);
+
+    if (hostedZone) {
+      new ARecord(this, `${stackName}DomainAlias`, {
+        zone: hostedZone,
+        target: RecordTarget.fromAlias(new CloudFrontTarget(distribution)),
+      });
+    }
 
     //Deploy site to s3
     const deploymentSource = Source.asset(props.frontendPath, {
@@ -147,8 +154,13 @@ export class FrontEndStack extends NestedStack {
     new BucketDeployment(this, "Deployment", {
       sources: [deploymentSource],
       destinationBucket: siteBucket,
-      //   distribution,
-      //   distributionPaths: ["/*"],
+      distribution,
+      distributionPaths: ["/*"],
+      cacheControl: [
+        CacheControl.maxAge(Duration.days(1)),
+        CacheControl.setPublic(),
+      ],
+      logRetention: RetentionDays.ONE_WEEK,
     });
   }
 }

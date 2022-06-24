@@ -6,7 +6,6 @@ const project = new awscdk.AwsCdkTypeScriptApp({
   context: {
     app: "petorbz",
     "@aws-cdk/core:bootstrapQualifier": "worldid",
-    zone_name: "dev.petorbz.com",
     infura_id: "7a5d08b9ebe14d6690adebed05e77e83",
     petorbz_address: "0x9230211f4678365beca1c243b336843ff62751fd",
     wld_signal: "wid_d431510b467e07999228ccf880d80ad2",
