@@ -13,6 +13,7 @@
     "autoprefixer": "^10.4.8",
     "classnames": "^2.3.1",
     "connectkit": "^0.0.1",
+    "defender-relay-client": "^1.27.1",
     "ethers": "^5.6.9",
     "next": "12.2.4",
     "postcss": "^8.4.16",

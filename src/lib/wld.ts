@@ -1,4 +1,8 @@
-import { solidityPack, solidityKeccak256 } from "ethers/lib/utils";
+import {
+  solidityPack,
+  solidityKeccak256,
+  defaultAbiCoder as abi,
+} from "ethers/lib/utils";
 
 export const encode = (userAddress: string, orbName: string): string => {
   if (!userAddress || !orbName) return "";
@@ -13,4 +17,8 @@ export const encode = (userAddress: string, orbName: string): string => {
   ).toString(16);
 
   return `0x${rawDigest.padStart(64, "0")}`;
+};
+
+export const decode = <T>(type: string, encodedString: string): T => {
+  return abi.decode([type], encodedString)[0];
 };
