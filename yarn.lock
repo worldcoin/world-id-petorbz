@@ -1155,10 +1155,10 @@
   dependencies:
     "@walletconnect/window-getters" "^1.0.0"
 
-"@worldcoin/id@^0.4.0-alpha.1":
-  version "0.4.0-alpha.1"
-  resolved "https://registry.yarnpkg.com/@worldcoin/id/-/id-0.4.0-alpha.1.tgz#cc5d35bd5ecff8405e263f6deac7b7d1a4a3db0b"
-  integrity sha512-KETxTg4HeF2JShPTZuEUuH4tBcQ09gLwGkoN47wB0cfSwQT1hYtK5UnGPDDtg+SKiH1iYFEBvc+OBtkxXye5Rg==
+"@worldcoin/id@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@worldcoin/id/-/id-0.4.0.tgz#23734e18662f4171cb79a26997aae431ad56d12a"
+  integrity sha512-nRtqICBYNxzQlxojGRyv/Y/HG9kY2FY5HgUHiLnjPI4FHx5IyyhjGToTZR42MXpuTYLOxv3MwBTNdi6e0vRH7g==
   dependencies:
     "@ethersproject/bytes" "5.6.1"
     "@stitches/react" "1.2.8"
