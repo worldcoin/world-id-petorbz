@@ -2,12 +2,12 @@ import { decode } from "@/lib/wld";
 import PetOrbz from "@/abi/PetOrbz.json";
 import { Contract, providers } from "ethers";
 import { Relayer } from "defender-relay-client";
+import { VerificationResponse } from "@worldcoin/id";
 import { NextApiRequest, NextApiResponse } from "next";
-import { VerificationResponse } from "@worldcoin/id/dist/types";
 
 type Request = {
-  address: string;
   name: string;
+  address: string;
   proof: VerificationResponse;
 };
 

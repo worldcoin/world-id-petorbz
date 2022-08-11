@@ -5,9 +5,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { encode } from "@/lib/wld";
 import PetOrbz from "@/abi/PetOrbz.json";
-import { WorldIDWidget } from "@worldcoin/id";
 import { useAccount, useContractRead } from "wagmi";
-import { VerificationResponse } from "@worldcoin/id/dist/types";
+import { WorldIDWidget, VerificationResponse } from "@worldcoin/id";
 import {
   Fragment,
   memo,
@@ -177,8 +176,6 @@ const NameScreen = () => {
                 enableTelemetry={true}
                 onSuccess={handleVerify}
                 advancedUseRawSignal={true}
-                onError={(e) => console.error(e)}
-                onInitError={(e) => console.error(e)}
                 actionId={process.env.NEXT_PUBLIC_WLD_SIGNAL}
               />
             </div>
