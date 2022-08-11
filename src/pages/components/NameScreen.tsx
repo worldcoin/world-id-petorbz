@@ -5,7 +5,6 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { encode } from "@/lib/wld";
 import PetOrbz from "@/abi/PetOrbz.json";
-import { WorldIDWidget } from "@worldcoin/id";
 import { useAccount, useContractRead } from "wagmi";
 import { VerificationResponse } from "@worldcoin/id/dist/types";
 import {
@@ -17,6 +16,10 @@ import {
   useRef,
   useState,
 } from "react";
+import dynamic from "next/dynamic";
+
+const WorldIDWidget = dynamic(() => import("@worldcoin/id").then((mod) => mod.WorldIDWidget), { ssr: false });
+
 
 const NameScreen = () => {
   const { address } = useAccount();
