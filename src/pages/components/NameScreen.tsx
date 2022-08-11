@@ -3,19 +3,16 @@ import cn from "classnames";
 import Button from "./Button";
 import Header from "./Header";
 import Footer from "./Footer";
+import dynamic from "next/dynamic";
 import { encode } from "@/lib/wld";
 import PetOrbz from "@/abi/PetOrbz.json";
 import { useAccount, useContractRead } from "wagmi";
-import { WorldIDWidget, VerificationResponse } from "@worldcoin/id";
-import {
-  Fragment,
-  memo,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { VerificationResponse } from "@worldcoin/id";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+const WorldIDWidget = dynamic(
+  () => import("@worldcoin/id").then((module) => module.WorldIDWidget),
+  { ssr: false }
+);
 
 const NameScreen = () => {
   const { address } = useAccount();
@@ -84,7 +81,7 @@ const NameScreen = () => {
   const signal = useMemo(() => encode(address, name), [address, name]);
 
   return (
-    <Fragment>
+    <>
       <div className="grid h-full pt-2 pb-2 md:pt-8 md:pb-12 grid-rows-auto/1fr/auto gap-y-3 md:gap-y-12">
         <Header className="gap-y-4.5">
           {proof && (
@@ -216,7 +213,7 @@ const NameScreen = () => {
           <Footer className="hidden mt-6 md:grid justify-self-center md:justify-self-end" />
         </div>
       </div>
-    </Fragment>
+    </>
   );
 };
 

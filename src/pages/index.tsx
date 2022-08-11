@@ -1,10 +1,7 @@
 import cn from "classnames";
-import dynamic from "next/dynamic";
+import NameScreen from "./components/NameScreen";
 import IntroScreen from "./components/IntroScreen";
 import { FC, memo, useEffect, useState } from "react";
-const NameScreen = dynamic(() => import("./components/NameScreen"), {
-  ssr: false,
-});
 
 export type ScreenType = "intro" | "name";
 
