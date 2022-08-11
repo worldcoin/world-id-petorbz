@@ -169,6 +169,7 @@ const NameScreen = () => {
               }`}
             >
               <WorldIDWidget
+                // @ts-ignore
                 signal={signal}
                 enableTelemetry={true}
                 onSuccess={handleVerify}
