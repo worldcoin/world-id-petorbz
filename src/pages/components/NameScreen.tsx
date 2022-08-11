@@ -181,7 +181,6 @@ const NameScreen = () => {
                 onSuccess={handleVerify}
                 advancedUseRawSignal={true}
                 onError={(e) => console.error(e)}
-                onInitError={(e) => console.error(e)}
                 actionId={process.env.NEXT_PUBLIC_WLD_SIGNAL}
               />
             </div>
@@ -215,7 +214,7 @@ const NameScreen = () => {
               variant="blurred-success"
               size="medium"
             >
-              Succesfully Claimed
+              Successfully claimed
             </Button>
           )}
 
