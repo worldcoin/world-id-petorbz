@@ -1,4 +1,3 @@
-import { utils } from "@worldcoin/id";
 import {
   solidityPack,
   solidityKeccak256,
